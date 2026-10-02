@@ -1,0 +1,25 @@
+name: Semantic release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  packages: write
+
+jobs:
+  versioning:
+    uses: GEWIS/actions/.github/workflows/versioning.yml@v1
+
+  release:
+    uses: GEWIS/actions/.github/workflows/docker-release-ghcr.yml@v1
+    needs: versioning
+    if: ${{ needs.versioning.outputs.next-version != '' }}
+    with:
+      projects: '["."]'
+      docker-paths: '["gewis/kaneo-mailer"]'
+      version: ${{ needs.versioning.outputs.next-version }}

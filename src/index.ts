@@ -28,10 +28,10 @@ function imapClient(config: Config): ImapFlow {
 }
 
 /** Returns false when the run failed outright, e.g. IMAP was unreachable. */
-async function poll(config: Config, kaneo: KaneoClient): Promise<boolean> {
+async function poll(config: Config, processor: Processor): Promise<boolean> {
   try {
     // ImapFlow connections cannot be reused after logout, so every run gets a fresh one.
-    const summary = await runOnce(imapClient(config), new Processor(kaneo), config.imap.root, logger);
+    const summary = await runOnce(imapClient(config), processor, config.imap.root, logger);
     const handled = summary.accepted + summary.rejected + summary.retried;
     logger.log(
       handled > 0 ? 'info' : 'debug',
@@ -48,9 +48,13 @@ async function main(): Promise<void> {
   const config = loadConfig();
   logger.level = config.logLevel;
   const kaneo = new KaneoClient(config.kaneo.url, config.kaneo.apiKey);
+  const processor = new Processor(kaneo, {
+    projectId: config.kaneo.defaultProjectId,
+    column: config.kaneo.defaultColumn,
+  });
 
   if (config.pollInterval === 0) {
-    if (!(await poll(config, kaneo))) process.exitCode = 1;
+    if (!(await poll(config, processor))) process.exitCode = 1;
     return;
   }
 
@@ -64,7 +68,7 @@ async function main(): Promise<void> {
 
   logger.info(`polling every ${config.pollInterval}s`);
   while (!controller.signal.aborted) {
-    await poll(config, kaneo);
+    await poll(config, processor);
     await sleep(config.pollInterval * 1000, undefined, { signal: controller.signal }).catch(() => undefined);
   }
 }

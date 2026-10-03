@@ -78,6 +78,23 @@ describe('Processor', () => {
     expect(getColumns).not.toHaveBeenCalled();
   });
 
+  it('creates a task in the default project when the header is missing', async () => {
+    const { kaneo, createTask } = fakeKaneo();
+    const processor = new Processor(kaneo, { projectId: 'p1', column: 'to-do' });
+    const outcome = await processor.process(mail({ projectId: null, column: null }));
+
+    expect(outcome).toEqual({ state: 'accepted', taskId: 't1' });
+    expect(createTask).toHaveBeenCalledWith('p1', expect.objectContaining({ status: 'to-do' }));
+  });
+
+  it('prefers the message headers over the defaults', async () => {
+    const { kaneo, createTask } = fakeKaneo();
+    const processor = new Processor(kaneo, { projectId: 'p1', column: 'mail' });
+    await processor.process(mail({ projectId: 'p2', column: 'done' }));
+
+    expect(createTask).toHaveBeenCalledWith('p2', expect.objectContaining({ status: 'done' }));
+  });
+
   it('rejects an unknown column', async () => {
     const { kaneo } = fakeKaneo();
     const outcome = await new Processor(kaneo).process(mail({ column: 'nope' }));

@@ -21,12 +21,12 @@ Every poll the service:
 
 ### Headers
 
-| Header               | Required | Value                                                      |
-| -------------------- | -------- | ---------------------------------------------------------- |
-| `X-Kaneo-Project-Id` | yes      | The project id (from the project URL or the API).          |
-| `X-Kaneo-Column`     | no       | A column id, slug (`in-progress`) or name (`In Progress`). |
+| Header               | Required | Value                                                                                       |
+| -------------------- | -------- | ------------------------------------------------------------------------------------------- |
+| `X-Kaneo-Project-Id` | no       | The project id (from the project URL or the API). Falls back to `KANEO_DEFAULT_PROJECT_ID`. |
+| `X-Kaneo-Column`     | no       | A column id, slug (`in-progress`) or name (`In Progress`).                                  |
 
-Without `X-Kaneo-Column`, the task goes to the column named `Mail` if the project has one, otherwise to the first column on the board.
+Without `X-Kaneo-Column`, the task goes to `KANEO_DEFAULT_COLUMN` if set, otherwise to the column named `Mail` if the project has one, otherwise to the first column on the board.
 
 Most mail clients cannot add custom headers by hand. For Thunderbird, [Header Tools Lite](https://addons.thunderbird.net/en-US/thunderbird/addon/header-tools-lite/) works. Automated senders (scripts, forms, other services) can set them directly.
 
@@ -55,19 +55,21 @@ Kaneo rate limits API keys (100 requests per minute by default). Each message co
 
 All configuration comes from environment variables. See [`.env.example`](.env.example).
 
-| Variable        | Default                         | Description                                                            |
-| --------------- | ------------------------------- | ---------------------------------------------------------------------- |
-| `IMAP_HOST`     | required                        | IMAP server hostname.                                                  |
-| `IMAP_PORT`     | `993`                           | IMAP server port.                                                      |
-| `IMAP_TLS`      | `true`                          | Use implicit TLS. Set `false` for plain or STARTTLS on port 143.       |
-| `IMAP_USERNAME` | required                        | IMAP username.                                                         |
-| `IMAP_PASSWORD` | required                        | IMAP password.                                                         |
-| `IMAP_ROOT`     | `API`                           | Parent folder of `IN`, `OUT` and `REJECTED`.                           |
-| `KANEO_URL`     | required                        | Kaneo base URL. `/api` is appended if missing.                         |
-| `KANEO_API_KEY` | required                        | Kaneo API key, sent as a bearer token.                                 |
-| `POLL_INTERVAL` | `300`                           | Seconds between polls. `0` runs once and exits (for cron or CI jobs).  |
-| `LOG_LEVEL`     | `info`                          | `trace`, `debug`, `info`, `warn`, `error`. `trace` includes IMAP logs. |
-| `TZ`            | `Europe/Amsterdam` in the image | Timezone used to read due dates from subjects.                         |
+| Variable                   | Default                         | Description                                                                 |
+| -------------------------- | ------------------------------- | --------------------------------------------------------------------------- |
+| `IMAP_HOST`                | required                        | IMAP server hostname.                                                       |
+| `IMAP_PORT`                | `993`                           | IMAP server port.                                                           |
+| `IMAP_TLS`                 | `true`                          | Use implicit TLS. Set `false` for plain or STARTTLS on port 143.            |
+| `IMAP_USERNAME`            | required                        | IMAP username.                                                              |
+| `IMAP_PASSWORD`            | required                        | IMAP password.                                                              |
+| `IMAP_ROOT`                | `API`                           | Parent folder of `IN`, `OUT` and `REJECTED`.                                |
+| `KANEO_URL`                | required                        | Kaneo base URL. `/api` is appended if missing.                              |
+| `KANEO_API_KEY`            | required                        | Kaneo API key, sent as a bearer token.                                      |
+| `KANEO_DEFAULT_PROJECT_ID` | unset                           | Project used when a message has no `X-Kaneo-Project-Id` header.             |
+| `KANEO_DEFAULT_COLUMN`     | unset                           | Column id, slug or name used when a message has no `X-Kaneo-Column` header. |
+| `POLL_INTERVAL`            | `300`                           | Seconds between polls. `0` runs once and exits (for cron or CI jobs).       |
+| `LOG_LEVEL`                | `info`                          | `trace`, `debug`, `info`, `warn`, `error`. `trace` includes IMAP logs.      |
+| `TZ`                       | `Europe/Amsterdam` in the image | Timezone used to read due dates from subjects.                              |
 
 ## Running
 

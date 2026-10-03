@@ -24,28 +24,40 @@ export function resolveColumn(columns: Column[], wanted: string | null): Column 
   return sorted.find((c) => c.slug === DEFAULT_COLUMN || c.name.toLowerCase() === DEFAULT_COLUMN) ?? sorted[0];
 }
 
+export interface ProcessorDefaults {
+  /** Project used when a message has no project header. */
+  projectId?: string | null;
+  /** Column id, slug or name used when a message has no column header. */
+  column?: string | null;
+}
+
 export class Processor {
   private readonly columns = new Map<string, Promise<Column[]>>();
 
-  constructor(private readonly kaneo: KaneoClient) {}
+  constructor(
+    private readonly kaneo: KaneoClient,
+    private readonly defaults: ProcessorDefaults = {},
+  ) {}
 
   async process(mail: TaskMail): Promise<Outcome> {
-    if (!mail.projectId) {
+    const projectId = mail.projectId ?? this.defaults.projectId ?? null;
+    if (!projectId) {
       return { state: 'rejected', reason: `missing ${PROJECT_HEADER} header` };
     }
 
     try {
-      const columns = await this.columnsOf(mail.projectId);
-      const column = resolveColumn(columns, mail.column);
+      const columns = await this.columnsOf(projectId);
+      const wanted = mail.column ?? this.defaults.column ?? null;
+      const column = resolveColumn(columns, wanted);
       if (!column) {
         const reason =
-          mail.column === null
-            ? `project ${mail.projectId} has no columns`
-            : `no column matching ${COLUMN_HEADER} "${mail.column}" in project ${mail.projectId}`;
+          wanted === null
+            ? `project ${projectId} has no columns`
+            : `no column matching ${COLUMN_HEADER} "${wanted}" in project ${projectId}`;
         return { state: 'rejected', reason };
       }
 
-      const task = await this.kaneo.createTask(mail.projectId, {
+      const task = await this.kaneo.createTask(projectId, {
         title: mail.title,
         description: mail.description,
         status: column.slug,

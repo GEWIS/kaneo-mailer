@@ -14,16 +14,27 @@ describe('loadConfig', () => {
     const config = loadConfig(base);
     expect(config.imap).toMatchObject({ port: 993, secure: true, root: 'API' });
     expect(config.kaneo.url).toBe('https://kaneo.example.com/api');
+    expect(config.kaneo.defaultProjectId).toBeNull();
+    expect(config.kaneo.defaultColumn).toBeNull();
     expect(config.pollInterval).toBe(300);
     expect(config.logLevel).toBe('info');
   });
-
   it('reads overrides', () => {
-    const config = loadConfig({ ...base, IMAP_PORT: '143', IMAP_TLS: 'false', IMAP_ROOT: 'Kaneo', POLL_INTERVAL: '0' });
+    const config = loadConfig({
+      ...base,
+      IMAP_PORT: '143',
+      IMAP_TLS: 'false',
+      IMAP_ROOT: 'Kaneo',
+      POLL_INTERVAL: '0',
+      KANEO_DEFAULT_PROJECT_ID: ' prj ',
+      KANEO_DEFAULT_COLUMN: 'to-do',
+    });
     expect(config.imap).toMatchObject({ port: 143, secure: false, root: 'Kaneo' });
+    expect(config.kaneo.defaultProjectId).toBe('prj');
+    expect(config.kaneo.defaultColumn).toBe('to-do');
     expect(config.pollInterval).toBe(0);
+    expect(config.logLevel).toBe('info');
   });
-
   it.each(['IMAP_HOST', 'IMAP_USERNAME', 'IMAP_PASSWORD', 'KANEO_URL', 'KANEO_API_KEY'])('requires %s', (key) => {
     expect(() => loadConfig({ ...base, [key]: ' ' })).toThrow(new ConfigError(`${key} is required`));
   });

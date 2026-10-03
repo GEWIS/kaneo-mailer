@@ -10,6 +10,10 @@ export interface Config {
   kaneo: {
     url: string;
     apiKey: string;
+    /** Used when a message has no X-Kaneo-Project-Id header. */
+    defaultProjectId: string | null;
+    /** Used when a message has no X-Kaneo-Column header. */
+    defaultColumn: string | null;
   };
   /** Seconds between polls; 0 means run once and exit. */
   pollInterval: number;
@@ -64,6 +68,8 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     kaneo: {
       url: apiBaseUrl(required(env, 'KANEO_URL')),
       apiKey: required(env, 'KANEO_API_KEY'),
+      defaultProjectId: env['KANEO_DEFAULT_PROJECT_ID']?.trim() || null,
+      defaultColumn: env['KANEO_DEFAULT_COLUMN']?.trim() || null,
     },
     pollInterval: integer(env, 'POLL_INTERVAL', 300),
     logLevel: env['LOG_LEVEL']?.trim() || 'info',

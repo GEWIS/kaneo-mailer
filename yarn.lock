@@ -2461,9 +2461,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"imapflow@npm:^2.2.6":
-  version: 2.2.6
-  resolution: "imapflow@npm:2.2.6"
+"imapflow@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "imapflow@npm:2.4.0"
   dependencies:
     "@zone-eu/mailsplit": "npm:5.4.20"
     encoding-japanese: "npm:2.4.0"
@@ -2473,7 +2473,7 @@ __metadata:
     libqp: "npm:2.1.2"
     pino: "npm:10.3.1"
     socks: "npm:2.8.10"
-  checksum: 10c0/1d23d3d1d1e6bdce951152ff975df78264b7ea87f9c150fdd7ecf8708e0ede6328990ea40365ef50cd96dc99d18024abc0e610435fb408263fcdb9a83659fa54
+  checksum: 10c0/b1525e078585123ceedc31c56b1161a0ea88221afe045134331c420733569d0ea4ef05e5fc5f2dc1a98d181f4d582b5132404e420afacc5a479a0d3c587ab18e
   languageName: node
   linkType: hard
 
@@ -2850,10 +2850,10 @@ __metadata:
     "@vitest/coverage-v8": "npm:^5.0.3"
     eslint: "npm:^9.39.0"
     husky: "npm:^9.1.7"
-    imapflow: "npm:^2.2.6"
+    imapflow: "npm:^2.4.0"
     lint-staged: "npm:^17.6.0"
     log4js: "npm:^6.9.1"
-    mailparser: "npm:^3.9.36"
+    mailparser: "npm:^3.9.38"
     prettier: "npm:^3.6.0"
     tsx: "npm:^4.20.0"
     typescript: "npm:~6.0.3"
@@ -3109,9 +3109,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mailparser@npm:^3.9.36":
-  version: 3.9.36
-  resolution: "mailparser@npm:3.9.36"
+"mailparser@npm:^3.9.38":
+  version: 3.9.38
+  resolution: "mailparser@npm:3.9.38"
   dependencies:
     "@zone-eu/mailsplit": "npm:5.4.20"
     encoding-japanese: "npm:2.4.0"
@@ -3120,10 +3120,10 @@ __metadata:
     iconv-lite: "npm:0.7.3"
     libmime: "npm:5.4.7"
     linkify-it: "npm:5.0.2"
-    nodemailer: "npm:10.0.14"
+    nodemailer: "npm:10.1.0"
     punycode.js: "npm:2.3.1"
     tlds: "npm:1.261.0"
-  checksum: 10c0/968bc4e1140591e4aac7170d1c210657f6e3fecc38caf5aec737c636c2253fd9b9808427a25cdf13857fcda843fcac165de99a4b1d04683c013acc595062882d
+  checksum: 10c0/abde766b5cd27fd3e9b920d5072353fe1bda4a0fccbfd18fdced3627e24ea0acf32c154756895beee0f0afacefc2ddf16ef4e53f5da0ec6c3d1c64e014b83489
   languageName: node
   linkType: hard
 
@@ -3239,10 +3239,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemailer@npm:10.0.14":
-  version: 10.0.14
-  resolution: "nodemailer@npm:10.0.14"
-  checksum: 10c0/8965d6ccd0a69f5b439d2bf5efc67cc4bac34f4893749c7b6b6290d5541beaf03174a169546739f370e989fd0f050221eec25aa6b017544d5b16fc23be374937
+"nodemailer@npm:10.1.0":
+  version: 10.1.0
+  resolution: "nodemailer@npm:10.1.0"
+  checksum: 10c0/5715e92c8abc117df26ac97e1b55a571a5442afb995d38c1385d03dabfd0d538939f7db1246494af212e3e0351f23d8d17918b6bd85b8a76b56be1232162b8db
   languageName: node
   linkType: hard
 

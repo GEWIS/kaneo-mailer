@@ -17,9 +17,9 @@
     "postinstall": "husky || true"
   },
   "dependencies": {
-    "imapflow": "^2.10.0",
+    "imapflow": "^2.11.0",
     "log4js": "^6.9.1",
-    "mailparser": "^3.14.1"
+    "mailparser": "^3.14.3"
   },
   "devDependencies": {
     "@gewis/eslint-config-typescript": "^2.4.0",
